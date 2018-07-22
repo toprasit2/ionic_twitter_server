@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-var tweets = {
+var tweets = [
     {
         id:1,
         name: "Geng",
@@ -14,7 +14,7 @@ var tweets = {
         message: "my name is geng",
         created: "2018-07-20 12:15:02"
     }
-}
+]
 
 app.get('/', (req, res) => {
     let result = {
@@ -25,17 +25,34 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/tweets', (req,res) => {
-    res.json(tweets)
+    let result = {
+        status : 200,
+        data: tweets
+    }
+    res.json(result)
 })
 
 app.post('/api/tweets', (req,res) => {
+    let result = {
+        status : 200,
+        data: [],
+        message : "success insert tweet"
+    }
     let data = req.body
     tweets.push(data)
 })
 
 app.get('/api/search', (req,res) => {
-    let search = req.query.q
-    let result = {}
+    let q = req.query.q
+    let result = {
+        status : 200,
+        datas: []
+    }
+    tweets.forEach( (tweet) => {
+        if( tweet.message.indexOf(q) > -1 ){
+            result.datas.push(tweet)
+        }
+    })
     res.json(result)
 })
 
